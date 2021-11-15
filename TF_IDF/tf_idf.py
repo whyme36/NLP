@@ -145,7 +145,7 @@ if __name__ == '__main__':
         # print(TF_IDF_dict_content)
         # print(TF_IDF_dict_title)
         merged_values=tf_idf.merge_two_dicts_and_sort(TF_IDF_dict_title, TF_IDF_dict_content)
-        print(merged_values)
+        # print(merged_values)
         # print(merged_values)
         # print()
         # print(tf_idf.get_search_words(merged_values,words))

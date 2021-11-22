@@ -49,7 +49,7 @@ class Solution:
                         plik.write(f'{w}\n')
 if __name__ == '__main__':
     s=Solution()
-    category_link=input()
-    nb_of_links=int(input())
+    category_link=input()        #'https://pl.wikipedia.org/wiki/Kategoria:Miasta_w_Polsce'
+    nb_of_links=int(input())# 5
     page_to_download=s.get_n_pages_in_category(url=category_link,n=nb_of_links)
     s.get_contentLinks_imgLinks_categoryLinks_footnoteLInks_and_write_file(page_to_download=page_to_download)

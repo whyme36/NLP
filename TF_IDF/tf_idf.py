@@ -51,7 +51,7 @@ class TF_IDF:
                     self.all_title[word]=self.all_title[word]+1
                 else:
                     self.all_title[word] = 1
-        else:
+        elif title_content==1:
             for word in set(output):
                 if word in self.all_content:
                     self.all_content[word]=self.all_content[word]+1
@@ -92,9 +92,10 @@ class TF_IDF:
         add_dict = dict_one_counter + dict_two_counter
         dict_output = dict(add_dict)
         #due to dissapearing words as "care" (words with 0 value), this code restore this words
-        for word_one,word_two in zip(dict_one.keys(),dict_two.keys()):
+        for word_one in dict_one.keys():
             if word_one not in dict_output.keys():
-                dict_output[word_one]=0.0
+                dict_output[word_one] = 0.0
+        for word_two in dict_two.keys():
             if word_two not in dict_output.keys():
                 dict_output[word_two]=0.0
         return {key:dict_output[key] for key in sorted(dict_output, key=dict_output.get, reverse=True)}
@@ -102,14 +103,16 @@ class TF_IDF:
     def search_for_words(self,dict_merged:dict,array_of_words:list[str]):
         words_already_searched=[]
         for word in array_of_words:
+            word = word.lower()
+            clered_words = self.clear_words(phrase=word, file_name='diffs.txt', title_content=2)
             if len(word.split(' '))>1:
-                for word_one in word.split(' '):
+                for word_one in clered_words:
                     if word_one in dict_merged and word_one not in words_already_searched:
                         self.array_of_looking_words.append((self.nb_of_dokument, word_one, dict_merged[word_one]))
                         words_already_searched.append(word_one)
             else:
-                if word in dict_merged and word not in words_already_searched:
-                    self.array_of_looking_words.append((self.nb_of_dokument,word,dict_merged[word]))
+                if clered_words[0] in dict_merged and clered_words[0] not in words_already_searched:
+                    self.array_of_looking_words.append((self.nb_of_dokument,clered_words[0],dict_merged[clered_words[0]]))
                     words_already_searched.append(word)
         self.nb_of_dokument+=1
         return self.array_of_looking_words
@@ -129,35 +132,26 @@ if __name__ == '__main__':
     IDF_content=tf_idf.IDF(title_content=1)
     IDF_title = tf_idf.IDF(title_content=0)
 
-    # print(array_of_contents)
-    # print(array_of_titles)
-    # print()
-    # print(IDF_content)
-    # print(IDF_title)
-    # print()
-    index_word_value=[]
+
     # implementation  of TF_IDF measure and marge results (title and its content). Search words
+    index_word_value = []
     for content_dict,title_dict in zip(array_TF_contents,array_TF_titles):
         TF_IDF_dict_title=tf_idf.TF_IDF(TF_dict=title_dict, IDF_dict=IDF_title)
         for key in TF_IDF_dict_title:
             TF_IDF_dict_title[key] *= 2
         TF_IDF_dict_content=tf_idf.TF_IDF(TF_dict=content_dict, IDF_dict=IDF_content)
-        # print(TF_IDF_dict_content)
-        # print(TF_IDF_dict_title)
         merged_values=tf_idf.merge_two_dicts_and_sort(TF_IDF_dict_title, TF_IDF_dict_content)
-        # print(merged_values)
-        # print(merged_values)
-        # print()
-        # print(tf_idf.get_search_words(merged_values,words))
         index_word_value=tf_idf.search_for_words(merged_values, words)
-    # print(index_word_value)
+
     # for every looking words write array of sorted index (biggest value first)
     for word in words:
+        word.lower()
+        clered_words = tf_idf.clear_words(phrase=word, file_name='diffs.txt', title_content=2)
         # [(0, 'care', 0.3521825181113625), (1, 'care', 0.0), (2, 'care', 0.3521825181113625), (2, 'gain', 1.1132829276792124), (1, 'is', 1.0129395957912186), (2, 'is', 0.11739417270378749)]
         #if we are looking for more than 1 word
         if len(word.split(' '))>1:
             specific_words=[]
-            for word_one in word.split(' '):
+            for word_one in clered_words:
                 array_for_specific_word = [tuple for tuple in index_word_value if tuple[1] == word_one]
                 for i in array_for_specific_word:
                     specific_words.append(i)
@@ -166,17 +160,13 @@ if __name__ == '__main__':
                 if not index in output:
                     output[index] = value
                 else:
-                    output[index] = (output[index] + value) / 2
-            # print(output)
-            print([k for k, v in sorted(output.items(), key=lambda item: item[1])])
+                    output[index] = (output[index] + value)
+            print([k for k, v in sorted(output.items(), key=lambda item: item[1], reverse=True)])
 
         #[[0, 'care', 0.3521825181113625], [1, 'care', 0.0], [1, 'is', 1.0129395957912186], [2, 'care', 0.3521825181113625], [2, 'is', 0.11739417270378749]]
         #if we looking just one word
         else:
-            array_for_specific_word=[tuple for tuple in index_word_value if tuple[1] == word]
-
+            array_for_specific_word=[tuple for tuple in index_word_value if tuple[1] == clered_words[0]]
             array_for_specific_word.sort(key=lambda x:x[2],reverse=True)
-            # {key: dict_output[key] for key in sorted(dict_output, key=dict_output.get, reverse=True)}?
             print([index for index,_,_  in array_for_specific_word])
-        # print(array_for_specific_word)
 

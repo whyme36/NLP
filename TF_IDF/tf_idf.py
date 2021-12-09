@@ -70,13 +70,10 @@ class TF_IDF:
     def IDF(self,title_content:int):
         if title_content==0:
             idf_dict=self.all_title
-            max_value_title = self.nb_of_documents
         else:
             idf_dict=self.all_content
-            max_value_title = idf_dict[max(idf_dict, key=idf_dict.get)]
-
+        max_value_title = self.nb_of_documents
         counted_words_dict_title = {key: log10(max_value_title/idf_dict[key]) for key in idf_dict}
-
         return counted_words_dict_title
     """ TF_IDF = multiplication TF and IDF"""
     def TF_IDF(self,TF_dict:str,IDF_dict:dict):
@@ -142,7 +139,6 @@ if __name__ == '__main__':
         TF_IDF_dict_content=tf_idf.TF_IDF(TF_dict=content_dict, IDF_dict=IDF_content)
         merged_values=tf_idf.merge_two_dicts_and_sort(TF_IDF_dict_title, TF_IDF_dict_content)
         index_word_value=tf_idf.search_for_words(merged_values, words)
-
     # for every looking words write array of sorted index (biggest value first)
     for word in words:
         word.lower()

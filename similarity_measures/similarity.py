@@ -83,8 +83,12 @@ class similarity_based_on_TFIDF:
                 numerator+=dict[word]
                 denominator_1+=dict[word]**2
                 denominator_2+=dics_looking_words[word]**2
-        sum_measure=2*numerator/(denominator_1*denominator_2)
-        return round(sum_measure,2)
+        try:
+            sum_measure=2*numerator/(denominator_1*denominator_2)
+
+        except ZeroDivisionError:
+            sum_measure=0
+        return round(sum_measure, 2)
     def jaccard(self,dict,dics_looking_words):
         """
         :param dict_0 - sorted and filled TF_IDF dict:
@@ -115,8 +119,12 @@ class similarity_based_on_TFIDF:
                 numerator += dict[word]
                 denominator_1 += dict[word] ** 2
                 denominator_2 += dics_looking_words[word] ** 2
-        sum_measure = numerator / (sqrt(denominator_1) * sqrt(denominator_2))
+        try:
+            sum_measure = numerator / (sqrt(denominator_1) * sqrt(denominator_2))
+        except ZeroDivisionError:
+            sum_measure=0
         return round(sum_measure, 2)
+
 if __name__ == '__main__':
     # read data
     similarity=similarity_based_on_TFIDF()

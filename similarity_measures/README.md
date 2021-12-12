@@ -1,27 +1,27 @@
 # Similarity
 
-Class assignment, use probability measures between the texts: product, dice, jaccard and cosine
+Class task, use the probability measures between the texts: product, cube, Jaccard and cosine
 
 ## Reading
 
 Reading a file:
 * number of documents (n),
 * n lines with documents,
-* a line with a query.
+* line with query.
 
 
 ## Processing
 
-The loaded documents have been cleaned up: the letters have been reduced, the periods and commas have been discarded, and the documents have been written to an array.
+The read documents were cleaned: letters were shrunk, periods and commas were removed, and documents were saved to an array.
 
 ## Method
 
-TF-IDF measure was used to calculate the word weights of the documents. Words with a weight of 0 that were not in the document but were found in the other documents were also added.
+The TF-IDF measure was used to calculate the weights of the words in the documents. Words with a weight of 0 that were not present in a document but were present in other documents were also added. Words from the query were given a weight of 1, this was imposed by the task content.
 
-The document dictionaries thus obtained, were compared to the query by calculating the distance measures.
+The resulting document dictionaries were compared to the query by calculating the distance measures.
 ## Output
 
-n lines, in each a list with the measures: product, Dice, Jaccard and cosine, for the given document.
+n rows, and in each row a list of measures: product, Dice, Jaccard, and cosine for the given document.
 
 
-
+Translated with www.DeepL.com/Translator (free version)

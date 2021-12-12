@@ -157,6 +157,7 @@ if __name__ == '__main__':
                     output[index] = value
                 else:
                     output[index] = (output[index] + value)
+            print( output)
             print([k for k, v in sorted(output.items(), key=lambda item: item[1], reverse=True)])
 
         #[[0, 'care', 0.3521825181113625], [1, 'care', 0.0], [1, 'is', 1.0129395957912186], [2, 'care', 0.3521825181113625], [2, 'is', 0.11739417270378749]]
@@ -164,5 +165,6 @@ if __name__ == '__main__':
         else:
             array_for_specific_word=[tuple for tuple in index_word_value if tuple[1] == clered_words[0]]
             array_for_specific_word.sort(key=lambda x:x[2],reverse=True)
+            print(array_for_specific_word)
             print([index for index,_,_  in array_for_specific_word])
 

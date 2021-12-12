@@ -23,5 +23,3 @@ The resulting document dictionaries were compared to the query by calculating th
 
 n rows, and in each row a list of measures: product, Dice, Jaccard, and cosine for the given document.
 
-
-Translated with www.DeepL.com/Translator (free version)

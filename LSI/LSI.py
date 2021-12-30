@@ -52,11 +52,15 @@ class LSI_SVD_cosine_similarity:
         :param k - num of dimention:
         :return:
         """
-        U, s, Vt = np.linalg.svd(matrix, full_matrices=False)
-        U = U[:, :k]
+        U, s, Vt = np.linalg.svd(matrix)
+        U = np.around(U[:, :k],decimals=3)
         s = np.diag(s)
-        s = s[:k, :k]
-        Vt = Vt[:k, :]
+        s = np.around(s[:k, :k],decimals=3)
+        Vt = np.around(Vt[:k, :],decimals=3)
+        # print(U.shape, s.shape, Vt.shape)
+        # print(U)
+        # print(s)
+        # print(Vt)
         return U.dot(s.dot(Vt))
     def cosine_similarity(self,v1, v2):
         "compute cosine similarity of 2 vectors "
@@ -90,18 +94,18 @@ if __name__ == '__main__':
     query=query.lower().split()
     vector=lsi.make_matrix(query,set,is_query=True)
     # print(vector)
-    docs.append(vector)
+    # docs.append(vector)
     docs=np.array(docs)
     # print(docs)
-
+    # print(docs.T)
     #svd
-    docs=lsi.svd_reduce_to_k_dim(docs,2)
-    # print(docs)
+    docs=lsi.svd_reduce_to_k_dim(docs.T,num_dim+1)
+    # print(docs.T)
 
     #cos similarity
     output=[]
-    for doc in docs[:-1]:
-        output.append(lsi.cosine_similarity(doc,docs[-1:][0]))
+    for doc in docs.T:
+        output.append(lsi.cosine_similarity(doc,vector))
     print(output)
 
 # input

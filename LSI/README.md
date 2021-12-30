@@ -42,7 +42,7 @@ The main idea of the algorithm is shown on the graphic below.
 
 ## Output
 
-* lista z 𝑛 wartościami podobieństwa do zapytania dla każdego z 𝑛 dokumentów
+* list with 𝑛 query similarity values for each 𝑛 document
 
 
 

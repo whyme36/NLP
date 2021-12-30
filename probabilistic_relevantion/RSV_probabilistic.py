@@ -6,6 +6,15 @@ from math import log10
 # Your care is gain of care when new care is won.
 # care loss
 # 0 1 1
+# 6
+# Somewhere in Poland
+# City in the western Poland in the Greater Poland region.
+# You can see the Polish city, in the western part.
+# Capital in Poland
+# Here is the capital and largest city of Poland.
+# I can't beleive that I see a western city in Poland, in the Greater Poland region.
+# western city in Poland
+# 0 1 1 0 0 1
 class Solution():
     def __init__(self):
         self.dic_relevant=[]
@@ -39,14 +48,15 @@ class Solution():
                 doc_count+=1
         return doc_count
     # probabilistic measure
-    def p_n_c(self,array_of_cleared_documents,word:str):
+    def p_n_c(self,array_of_cleared_documents,word:str) -> int:
         S=self.relevant_document
         N=self.all_document
         s=self.how_many_relevant_doc_have_word(array_of_cleared_documents, word)
         df_i=self.how_many_doc_have_word(array_of_cleared_documents, word)
-        # p =  s/S
+        # p = s/S
         # n =(df_i-s)/(N-S)
-        c=log10(((s+1/2)/(S-s+1/2))/((df_i-s+1/2)/(N-df_i-S+s+1/2)))
+
+        c=log10(((s+0.5)/(S-s+0.5))/((df_i-s+0.5)/(N-df_i-S+s+0.5)))
 
         return c
 
@@ -67,10 +77,10 @@ if __name__ == '__main__':
 
     #count score of words in query
     c_score={}
+
     query=query.lower().split()
     for word in query:
         c_score[word]= s.p_n_c(docs_cleared,word)
-
     # count probabilistic of documents
     output={}
     for index,doc in enumerate(docs_cleared):
@@ -80,10 +90,11 @@ if __name__ == '__main__':
             elif word in doc and not index in output.keys():
                 output[index] = c_score[word]
     # print
+    print(docs_cleared)
     print([round(value,2) for value in output.values()])
 #output
 #[0.22, 0.7, 0.22]
-
+# [0.0, 2.76, 3.38, 0.0, 0.44, 2.76]
 
 
 

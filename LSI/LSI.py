@@ -61,12 +61,12 @@ class LSI_SVD_cosine_similarity:
         # print(U)
         # print(s)
         # print(Vt)
-        return U.dot(s.dot(Vt))
+        return s.dot(Vt).T,s,U.T#U.dot(s.dot(Vt))
     def cosine_similarity(self,v1, v2):
         "compute cosine similarity of 2 vectors "
         numerator, denominator_1, denominator_2 = 0, 0, 0
         for i in range(len(v1)):
-            x = v1[i];
+            x = v1[i]
             y = v2[i]
             denominator_1 += x ** 2
             denominator_2 += y ** 2
@@ -98,14 +98,15 @@ if __name__ == '__main__':
     docs=np.array(docs)
     # print(docs)
     # print(docs.T)
-    #svd
-    docs=lsi.svd_reduce_to_k_dim(docs.T,num_dim+1)
-    # print(docs.T)
+
+    #svd + create query using LSI approach
+    sVt,s,Ut=lsi.svd_reduce_to_k_dim(docs.T,num_dim)
+    new_query=np.linalg.inv(s).dot(Ut).dot(vector)
 
     #cos similarity
     output=[]
-    for doc in docs.T:
-        output.append(lsi.cosine_similarity(doc,vector))
+    for doc in sVt:
+        output.append(lsi.cosine_similarity(doc,new_query))
     print(output)
 
 # input

@@ -66,6 +66,7 @@ class PageRank:
                 output_matrx.append(array)
         return np.array(output_matrx)
 if __name__ == '__main__':
+    # create conncetion matrix from url
     graph=Graph_from_links()
     # url='https://lewoniewski.info/sw/pagerank/poznan.html'
     url='https://lewoniewski.info/sw/pagerank2/polska.html'
@@ -75,10 +76,11 @@ if __name__ == '__main__':
 
     graph_of_sites=graph.get_n_pages_in_category(url)
     # print(graph_of_sites)
-    d=0.85
+
     matrix=np.array(graph.make_graph_matrix(graph_of_sites))
     # print(matrix)
-
+    #create PageRank matrix
+    d = 0.85
     matrix=PageRank().create_probabilistic_matrix(matrix, d)
     # print(matrix)
     vector = np.array([0 for x in matrix[0]])
@@ -87,6 +89,7 @@ if __name__ == '__main__':
     # print()
     # print(vector)
     # print(previous)
+    # iteration to best result 
     while not np.allclose(previous, vector, rtol=0, atol=1e-06):
         previous = vector
         vector = vector.dot(matrix)

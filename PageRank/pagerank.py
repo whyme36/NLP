@@ -3,13 +3,15 @@ import urllib.request, re
 import numpy as np
 class Graph_from_links:
     def get_n_pages_in_category(self, url: str) ->dict:
-        form_page = re.findall(r'pagerank/([^"]+)', url)
+        form_page = re.findall(r'/([^"]+).html$', url)
+        form_page = form_page[0].split('/')[-1]+'.html'
+        page_site = re.findall(r'/([^"]+).html$', url)[0].split('/')[-2]
         page = urllib.request.urlopen(url)
         code = page.read().decode('utf-8')
         sites = set(re.findall(r'<a href="([^"]+)"', code))
-        output_dict={form_page[0]: sites}
+        output_dict={form_page: sites}
 
-        path = 'https://lewoniewski.info/sw/pagerank/'
+        path = f'https://lewoniewski.info/sw/{page_site}/'
         for site in sites:
             url=path+site
             page_in_site = urllib.request.urlopen(url)
@@ -37,6 +39,7 @@ class Graph_from_links:
                     links_not_visited.append(link)
         return links_not_visited
     def make_graph_matrix(self, graph:dict):
+        graph={k: v for k, v in sorted(graph.items(), key=lambda item: item[0])}
         output=[[] for i in range(len(graph))]
         columns=[]
         for key in graph.keys():
@@ -59,12 +62,13 @@ class PageRank:
             else:
                 sum_elem=sum(array)
                 array=[d*x/sum_elem for x in array]
-                array=[round(x+((1-d)/arrays_len),4) for x in array]
+                array=[x+((1-d)/arrays_len) for x in array]
                 output_matrx.append(array)
         return np.array(output_matrx)
 if __name__ == '__main__':
     graph=Graph_from_links()
-    url='https://lewoniewski.info/sw/pagerank/poznan.html'
+    # url='https://lewoniewski.info/sw/pagerank/poznan.html'
+    url='https://lewoniewski.info/sw/pagerank2/polska.html'
 
     page = urllib.request.urlopen(url)
     code = page.read().decode('utf-8')
@@ -73,25 +77,20 @@ if __name__ == '__main__':
     # print(graph_of_sites)
     d=0.85
     matrix=np.array(graph.make_graph_matrix(graph_of_sites))
-    print(matrix)
+    # print(matrix)
 
     matrix=PageRank().create_probabilistic_matrix(matrix, d)
-    print(matrix)
-    y = np.array([1, 0, 0, 0, 0, 0, 0, 0])
+    # print(matrix)
+    vector = np.array([0 for x in matrix[0]])
+    vector[0]=1
+    previous= np.array([0 for x in matrix[0]])
+    # print()
+    # print(vector)
+    # print(previous)
+    while not np.allclose(previous, vector, rtol=0, atol=1e-06):
+        previous = vector
+        vector = vector.dot(matrix)
 
 
+    print(vector.round(4))
 
-    print()
-    y = y.dot(matrix)
-    print(y)
-    # previous_y = 0
-    #
-    # while True:
-    #     if (y>previous_y+previous_y*0.0001).all():
-    #         previous_y = y
-    #         y = y.dot(matrix)
-    #     else:
-    #         break
-    #
-    #
-    # print(y)

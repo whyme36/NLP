@@ -30,7 +30,7 @@ d - dumping factor
 Li - number of outgoing links to other websites from website i
 ## Output
 
-Output: A list with PageRank measure values for documents sorted by URL.
+Output: A list with PageRank measure values for documents sorted by URL. 
 
 
 
